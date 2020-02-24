@@ -1,0 +1,142 @@
+/* 
+面试题:前端有哪些动画技术可以使用？
+①JS定时器动画 —— setTimeout,执行效率低
+②CSS3 Transition —— 执行效率高,无法只能指定起止两个帧,无法循环
+③CSS3 Animation —— 执行效率高,可以指定任意多个帧,可以循环
+④requestAnimationFrame —— 执行效率最高,浏览器兼容性有问题
+
+动画效果库——使用方案三
+具体使用方法: <img class="animate  rotate">
+具体使用方法: <img class="animate  infinite  rotate">
+具体使用方法: <img class="animate  infinite  paused  rotate">
+ */
+
+/* 动画基础类 */
+.animate {
+	animation-timing-function: linear;
+	animation-duration: .2s;
+	animation-fill-mode: both;
+}
+/* 无限循环的动画 */
+.infinite {
+	animation-iteration-count: infinite;
+}
+/* 处于暂停状态的动画 */
+.paused {
+	animation-play-state: paused;
+}
+
+/* 动画效果类1: 旋转动画 */
+.rotate {
+	animation-name: rotate;
+	animation-duration: 6s !important;
+}
+@keyframes rotate{
+	from{
+		transform: rotate(0);
+	}
+	to{
+		transform: rotate(360deg);
+	}
+}
+
+/* 动画效果类2: 渐渐进入/淡入 */
+.fadeIn {
+	animation-name: fadeIn;
+}
+@keyframes fadeIn{
+	from{
+		opacity: 0;
+	}
+	to{
+		opacity: 1;
+	}
+}
+/* 动画效果类3: 渐渐隐藏/淡出 */
+.fadeOut {
+	animation-name: fadeOut;
+}
+@keyframes fadeOut{
+	from{
+		opacity: 1;
+	}
+	to{
+		opacity: 0;
+	}
+}
+/* 动画效果类4: 以顶部中央为轴抬起 */
+.liftUp {
+	animation-name: liftUp;
+	transform-origin: center  top;
+}
+@keyframes liftUp{
+	from{
+		transform: rotate(0);
+	}
+	to{
+		transform: rotate(-30deg);
+	}
+}
+/* 动画效果类5: 以顶部中央为轴放下 */
+.liftDown {
+	animation-name: liftDown;
+	transform-origin: center  top;
+}
+@keyframes liftDown{
+	from{
+		transform: rotate(-30deg);
+	}
+	to{
+		transform: rotate(0);
+	}
+}
+/* 动画效果类6: 从左侧滑动移出 */
+.slideOutLeft {
+	animation-name: slideOutLeft;
+}
+@keyframes slideOutLeft{
+	from{
+		transform: translateX(0);
+	}
+	to{
+		transform: translateX(-100%);
+		visibility: hidden;
+	}
+}
+/* 动画效果类7: 从右侧滑动移入 */
+.slideInRight {
+	animation-name: slideInRight;
+}
+@keyframes slideInRight{
+	from{
+		transform: translateX(100%);
+	}
+	to{
+		transform: translateX(0);
+	}
+}
+/* 动画效果类8: 从左侧滑动移入 */
+.slideInLeft {
+	animation-name: slideInLeft;
+}
+@keyframes slideInLeft{
+	from{
+		transform: translateX(-100%);
+	}
+	to{
+		transform: translateX(0);
+	}
+}
+/* 动画效果类9: 从右侧滑动移出 */
+.slideOutRight {
+	animation-name: slideOutRight;
+}
+@keyframes slideOutRight{
+	from{
+		transform: translateX(0);
+	}
+	to{
+		transform: translateX(100%);
+		visibility: hidden;
+	}
+}

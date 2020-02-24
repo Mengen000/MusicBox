@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="css/animate.css"/>
+	<style>
+		*{margin: 0;padding: 0;}
+		html{
+			height: 100%;
+		}
+		body{
+			height:100%
+		}
+		#bgContainer{
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			z-index: -1;
+		}
+		#bgContainer > div {
+			width: 100%;
+			height: 100%;
+			background-size: cover;
+		}
+		#songBack{
+			position: fixed;
+			left: 2%;
+			top: 4%;
+			color: #FFFFFF;
+		}
+		#songName{
+			position: fixed;
+			left: 10%;
+			top: 2%;
+			color:#fff;
+			font-size: 22px;
+		}
+		#authorName{
+			position: fixed;
+			left: 10%;
+			top: 6%;
+			color:#fff;
+			font-size: 16px;
+		}
+		#songHead{
+			width: 30px;
+			height: 30px;
+			position: fixed;
+			right:3%;
+			top:3%;
+			border: 1px solid brown;
+			border-radius: 50%;
+			background: #f00;
+		}
+		#discContainer{
+			position: fixed;
+			width: 100%;
+			height: 100%;
+		}
+		#discContainer > img{
+			position: fixed;
+			width: 80%;
+			left: 10%;
+			top: 25%;
+		}
+		#pin{
+			position: fixed;
+			width: 50%;
+			left: 25%;
+			top: 10%;
+		}
+		#prev{
+			position: fixed;
+			width: 6%;
+			left: 20%;
+			bottom: 7.5%;
+		}
+		#next{
+			position: fixed;
+			width: 6%;
+			right: 20%;
+			bottom: 7.5%;
+		}
+		#play{
+			position: fixed;
+			width: 12%;
+			left: 44%;
+			bottom: 6%;
+		}
+		#pause{
+			position: fixed;
+			width: 12%;
+			left: 44%;
+			bottom: 6%;
+		}
+			
+	</style>
+</head>
+<body>
+	<!-- #bgContainer:其中可以包含“背景图片” -->
+	<div id="bgContainer">
+		<!-- <div class="animate fadeOut"></div> -->
+		<!-- <div class="animate fadeIn"></div> -->
+		<div id="bg" class="animate"></div>
+	</div>
+	
+	<!-- #songBack 返回标志 -->
+	<div id="songBack">&lt;&lt;</div>
+	
+	<!-- #songname当前播放曲目名称 -->
+	<div id="songName"></div>
+	
+	<!-- #authorName 该曲目的作家-->
+	<div id="authorName"></div>
+	
+	<!-- 作家头像 -->
+	<div id="songHead"></div>
+	
+	<!-- #discContainer:圆形唱片 -->
+	<div id="discContainer">
+		<img id="disc" src="" class="animate infinite rotate" >
+		<!-- <img src="img/disc1.png" class="animate infinite paused" > -->
+	</div>
+	<!-- #pin:播放探针 -->
+	<img id="pin" class="animate" src="img/pin.png" >
+	
+	<!-- 三个播放控制按钮 -->
+	<img id="prev" src="img/prev.png" >
+	<div id="btn">
+		<img id="pause" src="img/pause.png" >	
+	</div>
+	<img id="next" src="img/next.png" >
+	<script>
+		// 当前播放曲目在歌单中的下标
+		var curIndex=0
+		// 播放列表
+		var playList=[
+			{mid:1,name:'曲目01',bg:'img/bg1.jpg',disc:'img/disc1.png',audio:'audio/1.mp',authorName:"孟恩"},
+			{mid:2,name:'曲目02',bg:'img/bg2.jpg',disc:'img/disc2.png',audio:'audio/2.mp',authorName:"孟恩"},
+			{mid:3,name:'曲目03',bg:'img/bg3.jpg',disc:'img/disc3.png',audio:'audio/3.mp',authorName:"孟恩"},
+			{mid:4,name:'曲目04',bg:'img/bg4.jpg',disc:'img/disc4.png',audio:'audio/4.mp',authorName:"孟恩"},
+			{mid:5,name:'曲目05',bg:'img/bg5.jpg',disc:'img/disc5.png',audio:'audio/5.mp',authorName:"孟恩"},
+			{mid:6,name:'曲目06',bg:'img/bg6.jpg',disc:'img/disc6.png',audio:'audio/6.mp',authorName:"孟恩"},
+		]
+		// 设置起始时默认播放的曲目——歌名/背景/唱片图片/音频文件
+		let bg=bgContainer.querySelector('div')
+		bg.style.backgroundImage=`url(${playList[curIndex].bg})`//背景图
+		
+		songName.innerHTML=playList[curIndex].name//歌曲名称
+		authorName.innerHTML=playList[curIndex].authorName //歌曲作者
+		
+		let disc=discContainer.querySelector('img') //圆形唱片
+		disc.src=playList[curIndex].disc
+		
+		// 点击暂停/播放按钮时的指针/唱片/按钮的状态
+		let i=1;
+		btn.onclick=()=>{
+			i++
+			if(i%2==0){
+				disc.classList.add('paused')
+				let play=pause.cloneNode(false)
+				play.id="play"
+				play.src="img/play.png"
+				btn.appendChild(play)
+				btn.removeChild(pause)
+				pin.classList.remove('liftDown')
+				pin.classList.add('liftUp')
+			}else{
+				disc.classList.remove('paused')
+				let pause=play.cloneNode(false)
+				pause.id="pause"
+				pause.src="img/pause.png"
+				btn.appendChild(pause)
+				btn.removeChild(play)
+				pin.classList.remove('liftUp')
+				pin.classList.add('liftDown')
+			}
+		}
+		prev.onclick=()=>{
+			let newBg=bg.cloneNode(false)
+			newBg.id='newBg'
+			bg.classList.add('fadeOut')
+			let m
+			if(curIndex>0){
+				curIndex--
+				m=playList[curIndex].mid
+				newBg.style.backgroundImage='url(img/bg'+m+'.jpg)'//背景图
+			}else{
+				curIndex=5
+				m=playList[curIndex].mid
+				newBg.style.backgroundImage='url(img/bg'+m+'.jpg)'//背景图
+			}
+			bgContainer.appendChild(newBg)
+			newBg.classList.add('fadeIn')
+			setTimeout(()=>{
+				bgContainer.removeChild(bg)
+			},500)
+			
+			
+			
+			// let bgsecond=bgfirst.cloneNode(false)
+			// bgsecond.id='bgsecond'
+			// bgfirst.classList.add('fadeOut')
+			// if(i>1){
+			// 	i--
+			// 	bgsecond.src='img/bg'+i+'.jpg'
+			// }else{
+			// 	i=6
+			// 	bgsecond.src=`img/bg${i}.jpg`
+			// }
+			// Bg.appendChild(bgsecond)
+			// bgsecond.classList.add('fadeIn')
+			// setTimeout(()=>{
+			// 	Bg.removeChild(bgfirst)
+			// 	bgsecond.clssList.remove('fadeOut')
+			// },2000)
+		}
+	</script>
+</body>
+</html>
